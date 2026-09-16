@@ -31,7 +31,9 @@ Structure appears only when the content earns it:
 | 3 or more parallel items | Bullets |
 | 2 or more things compared across 2 or more attributes | Table |
 | 3 or more distinct parts | Headings |
-| Layout, flow, hierarchy, or numbers | ASCII block |
+| Directory layout or hierarchy | ASCII tree |
+| A sequence of 3 or more stages | ASCII arrow chain |
+| 3 or more numbers compared | ASCII bar row |
 
 Formatting:
 
@@ -40,12 +42,42 @@ Formatting:
 - **Three sentences per paragraph**, maximum.
 - **Backticks** on commands, paths, flags, and identifiers.
 
-ASCII blocks are for trees, pipelines, state transitions, before/after layouts, and numeric comparison. Plain ASCII, 60 columns or fewer. One boxed callout per answer at most, for a warning that must not be missed.
+Draw the shape. Do not describe it in words instead.
+
+**Tree** — directory layout, hierarchy, nesting:
 
 ```
-v0.1.0  |||||||||||||||||  95 words
-v0.2.0  ||||||||||||       69 words
+plugin/
+├── .claude-plugin/plugin.json
+├── skills/<name>/SKILL.md
+└── hooks/hooks.json
 ```
+
+**Arrow chain** — a sequence of 3 or more stages:
+
+```
+upload -> OCR -> extract -> validate -> review -> export
+```
+
+**Bar row** — 3 or more numbers compared. Always draw this; the outlier
+should be visible without reading the figures:
+
+```
+suite A   ||                 12s
+suite B   |||||||            47s
+suite C   |                   9s
+suite D   ||||||||||||||||||||||  130s
+```
+
+**Box** — one warning per answer that must not be missed:
+
+```
++------------------------------------------+
+| Pushing rewrites public history           |
++------------------------------------------+
+```
+
+Plain ASCII, 60 columns or fewer.
 
 ## Never over-structure
 
@@ -57,7 +89,8 @@ v0.2.0  ||||||||||||       69 words
 ```
 
 - No one-row table. No two-item bullet list. No heading above a single paragraph.
-- No diagram for something a sentence handles.
+- No diagram that only repeats a sentence. A chain or bar row that lets the reader
+  see the shape at a glance is not decoration — draw it.
 - Never fragment a flowing explanation to make it look structured.
 - A short answer needs no scaffolding. Prose is the default, not the fallback.
 
