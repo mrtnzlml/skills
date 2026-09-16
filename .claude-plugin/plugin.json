@@ -1,0 +1,15 @@
+{
+  "name": "mrtnzlml-skills",
+  "version": "0.1.0",
+  "description": "Personal Claude Code skills",
+  "author": {
+    "name": "mrtnzlml"
+  },
+  "repository": "https://github.com/mrtnzlml/skills",
+  "keywords": [
+    "prose",
+    "writing",
+    "plain-english",
+    "code-quality"
+  ]
+}
