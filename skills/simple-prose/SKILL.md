@@ -1,19 +1,43 @@
 ---
 name: simple-prose
-description: Use when writing or editing any prose — documentation, READMEs, comments, commit messages, PR descriptions, issues, chat replies — or when asked to tighten, simplify, shorten, or improve text. Cuts verbosity, prefers plain English over formal or padded wording, and keeps customer-identifying details out of shared text.
+description: Use when writing or editing any prose — documentation, READMEs, comments, commit messages, PR descriptions, issues, chat replies — or when asked to tighten, simplify, shorten, or improve text. Cuts length hard, prefers plain English over formal or padded wording, and keeps customer-identifying details out of shared text.
 ---
 
 # Simple Prose
 
-Write so a tired reader understands on the first pass. Fewer words, shorter words, one idea at a time.
+Write so a tired reader understands on the first pass. Then stop.
+
+## Length
+
+Most prose is too long because it keeps going after the answer. Fix that first.
+
+- **Answer first**, in one sentence where possible. Add more only if the answer is wrong without it.
+- **No preamble.** Do not restate the question or announce what you are about to say.
+- **No closing summary.** No "why this matters" sentence, no "in short", no recap of what the reader just read.
+- **~20 words per sentence.** Past that, split or cut.
+- **One example, never two.** One qualifier, never three.
+- **Do not volunteer adjacent information.** If it was not asked, leave it out.
+- **Delete any sentence that would not be missed.** Apply this to every draft before sending.
+
+Length is the default failure. When unsure, cut.
+
+## Never cut
+
+Simple is not vague, and short is not wrong. Keep:
+
+- Technical terms, API names, identifiers, commands, flags, file paths, code, and quoted text — exactly as written.
+- Qualifiers that carry real uncertainty. "Usually" is meaning when something is usually true.
+- Conditions, caveats, and exceptions that change what is true.
+
+**If the shorter version changes what is true, keep the longer one.** Cut words, never accuracy.
 
 ## Cut
 
-- **Filler and throat-clearing.** "It is important to note that", "basically", "essentially", "as you know", "in this section we will".
+- **Filler and throat-clearing.** "It is important to note that", "basically", "essentially", "as you know".
 - **Hedges that hedge nothing.** "somewhat", "fairly", "I think", "it seems like" — when the statement is simply true.
-- **Restating.** Do not repeat the question before answering it. Do not summarize what you just said.
 - **Empty intensifiers.** "very", "really", "quite", "extremely", "truly".
-- **Long sentences.** Past ~25 words, split it. One idea per sentence.
+- **Connectives that only connect.** "Additionally", "Furthermore", "Moreover", "That said", "It is worth noting".
+- **Subordinate clauses that add colour, not meaning.**
 - **Passive voice** used without a reason. Name the actor: "the hook writes the file", not "the file is written".
 
 Prefer the short common word:
@@ -36,16 +60,6 @@ Prefer the short common word:
 | due to the fact that | because |
 | in the event that | if |
 | has the ability to | can |
-
-## Never cut
-
-Simple is not vague. Keep:
-
-- Technical terms, API names, identifiers, commands, flags, file paths, code, and quoted text — exactly as written.
-- Qualifiers that carry real uncertainty. "Usually" is meaning when something is usually true. Only cut a hedge that hedges nothing.
-- Conditions, caveats, and exceptions that change what is true.
-
-**If the shorter version changes what is true, keep the longer one.** Precision beats brevity every time.
 
 ## Customer data
 
