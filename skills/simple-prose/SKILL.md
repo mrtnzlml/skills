@@ -1,11 +1,11 @@
 ---
 name: simple-prose
-description: Use when writing or editing any prose — documentation, READMEs, comments, commit messages, PR descriptions, issues, chat replies — or when asked to tighten, simplify, shorten, or improve text. Cuts length hard, prefers plain English over formal or padded wording, and keeps customer-identifying details out of shared text.
+description: Use when writing or editing any prose — documentation, READMEs, comments, commit messages, PR descriptions, issues, chat replies — or when asked to tighten, simplify, shorten, structure, or improve text. Cuts length hard, structures what remains so it can be skimmed, and keeps customer-identifying details out of shared text.
 ---
 
 # Simple Prose
 
-Write so a tired reader understands on the first pass. Then stop.
+Optimise for time to understand, not word count. Cut words that do not earn their place, then structure what remains.
 
 ## Length
 
@@ -17,9 +17,49 @@ Most prose is too long because it keeps going after the answer. Fix that first.
 - **~20 words per sentence.** Past that, split or cut.
 - **One example, never two.** One qualifier, never three.
 - **Do not volunteer adjacent information.** If it was not asked, leave it out.
-- **Delete any sentence that would not be missed.** Apply this to every draft before sending.
+- **Delete any sentence that would not be missed.**
 
-Length is the default failure. When unsure, cut.
+Structure does not exempt you from this. A list of padded bullets is still padded.
+
+## Structure
+
+Structure appears only when the content earns it:
+
+| Trigger | Form |
+| --- | --- |
+| Under ~50 words | Plain sentences. Nothing else. |
+| 3 or more parallel items | Bullets |
+| 2 or more things compared across 2 or more attributes | Table |
+| 3 or more distinct parts | Headings |
+| Layout, flow, hierarchy, or numbers | ASCII block |
+
+Formatting:
+
+- **Lead with the key term**, bolded, when the reader will scan rather than read.
+- **One line per bullet.** If it needs two sentences, it is a paragraph.
+- **Three sentences per paragraph**, maximum.
+- **Backticks** on commands, paths, flags, and identifiers.
+
+ASCII blocks are for trees, pipelines, state transitions, before/after layouts, and numeric comparison. Plain ASCII, 60 columns or fewer. One boxed callout per answer at most, for a warning that must not be missed.
+
+```
+v0.1.0  |||||||||||||||||  95 words
+v0.2.0  ||||||||||||       69 words
+```
+
+## Never over-structure
+
+```
++--------------------------------------------+
+| If removing the structure loses nothing,   |
+| remove it.                                 |
++--------------------------------------------+
+```
+
+- No one-row table. No two-item bullet list. No heading above a single paragraph.
+- No diagram for something a sentence handles.
+- Never fragment a flowing explanation to make it look structured.
+- A short answer needs no scaffolding. Prose is the default, not the fallback.
 
 ## Never cut
 
