@@ -54,16 +54,23 @@ claude plugin eval .                         # 3 runs per arm, about $2.50
 
 Results land in `evals/results/`, which is gitignored.
 
-## Spinner verbs
+## What a plugin cannot do
 
-`settings.json` at the plugin root is loaded automatically and replaces the stock spinner verbs.
-Delete the file to get the 193 defaults back.
+A plugin can ship a `settings.json`, but Claude Code filters it to an allowlist — `agent` and
+`subagentStatusLine` — and silently drops everything else. There is no warning; the keys just do
+nothing. Settings like `spinnerVerbs` or `alwaysThinkingEnabled` have to live in
+`~/.claude/settings.json`.
+
+Check what survived with:
+
+```sh
+claude --plugin-dir . --debug --debug-file /tmp/cc.log -p "ok" && grep "plugin settings" /tmp/cc.log
+```
 
 ## Layout
 
 ```
 .claude-plugin/plugin.json   plugin manifest
-settings.json                settings the plugin contributes
 skills/<name>/SKILL.md       one directory per skill
 hooks/hooks.json             event handlers
 hooks-handlers/              hook scripts
