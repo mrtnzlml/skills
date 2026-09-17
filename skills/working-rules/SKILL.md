@@ -18,6 +18,8 @@ license: MIT
 
 Most prose is too long because it keeps going after the answer. Fix that first.
 
+**A reply is the answer plus only what the answer needs.** Under 150 words, unless the user asked for a document, a checklist they will work through, or code. The ceiling is the shape of a reply, not a target to fill.
+
 - **Answer first**, in one sentence where possible. Add more only if the answer is wrong without it.
 - **No preamble.** Do not restate the question or announce what you are about to say.
 - **No closing summary.** No "why this matters" sentence, no "in short", no recap of what the reader just read.

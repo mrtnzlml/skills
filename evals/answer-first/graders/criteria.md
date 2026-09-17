@@ -4,13 +4,14 @@ name: answers first
 weight: 2
 ---
 
-The question has a one-sentence answer: `git fetch` downloads without merging
-or touching the working tree, and `git pull` fetches and then merges.
+Do not reward or punish a response for resembling any particular wording.
+Judge it only against these four rules, which come from the skill under test:
 
-Pass a response that opens with that answer and stops once it is complete.
-Around 80 words is right. A second short paragraph is fine when it adds a fact
-the answer needs.
+1. The first sentence states the answer.
+2. Nothing precedes the answer: no restating the question, no announcement of
+   what is coming.
+3. Nothing follows the last load-bearing fact: no recap, no "why this matters".
+4. Nothing appears that the question did not ask for: no related flags, no
+   workflow advice, no command recipes, no comparison of trade-offs.
 
-Fail it if the answer arrives only after scene-setting, if the response runs
-past roughly 120 words, or if it volunteers material nobody asked for:
-workflow recommendations, related flags, command recipes, safety comparisons.
+Pass if all four hold. Fail if any one is broken.

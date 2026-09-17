@@ -1,27 +1,17 @@
 ---
 type: llm
-name: one idea per sentence
+name: actor named, clauses not stacked
 weight: 2
 ---
 
-The reader has intermediate English.
+The reader has intermediate English. Do not compare the response to any model
+answer, and do not judge sentence length — a separate grader measures that.
 
-Judge sentence shape only. Ignore preamble, headings, and the overall length —
-other cases cover those.
+Judge two things only:
 
-One subordinate clause per sentence is fine. One em dash is fine. Around 25
-words is fine.
+- Sentences name their actor. "The hook reads the file", not "the file is read".
+- No sentence stacks three or more clauses.
 
-This passes:
-
-> The hook runs a command when the session opens and adds its stdout to the
-> context, so the rules are present before the first turn.
-
-This fails. Three clauses are stacked and the actor disappears:
-
-> That decision is a judgment call made per task, which makes skills a good fit
-> for specialized procedures but a poor fit for standing rules — a constraint
-> that must hold everywhere cannot depend on being recognized as relevant first.
-
-Fail the response only if a sentence runs past about 35 words, stacks three or
-more clauses, or hides the actor behind the passive voice.
+Most sentences must satisfy both. Fail the response only if the passive voice
+hides the actor in two or more sentences, or if any sentence stacks three or
+more clauses.
