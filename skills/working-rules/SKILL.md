@@ -75,6 +75,11 @@ Simple is not vague, and short is not wrong. Keep:
 
 Prefer the short common word: "use" over "utilize", "about" over "approximately", "because" over "due to the fact that".
 
+Write for a reader whose English is good but not native. They know the technical terms, not the idioms.
+
+- **Idioms and figures of speech.** "We delayed the release", not "we bit the bullet". No sports or war comparisons.
+- **Business jargon standing in for a plain verb.** Not "circle back", "touch base", "deep dive", "ramp up", "bandwidth".
+
 ## Customer data
 
 Never leak a customer name or customer data. Before anything leaves this session — prose, code, config, file and branch names, commit messages, tool payloads, pasted output — scan for:

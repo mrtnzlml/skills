@@ -4,12 +4,13 @@ name: answers first
 weight: 2
 ---
 
-A passing response:
+The question has a one-sentence answer: `git fetch` downloads without merging
+or touching the working tree, and `git pull` fetches and then merges.
 
-- Answers in its first sentence: `git fetch` downloads without merging or changing the working tree.
-- Opens with the answer. It does not restate the question, greet, or announce what it is about to say.
-- Ends on the last load-bearing fact. No recap, no "why this matters" paragraph.
-- Stays under roughly 80 words.
+Pass a response that opens with that answer and stops once it is complete.
+Around 80 words is right. A second short paragraph is fine when it adds a fact
+the answer needs.
 
-Fail it if the answer arrives only after a scene-setting paragraph, or if the
-last sentence restates what the reader has already read.
+Fail it if the answer arrives only after scene-setting, if the response runs
+past roughly 120 words, or if it volunteers material nobody asked for:
+workflow recommendations, related flags, command recipes, safety comparisons.
