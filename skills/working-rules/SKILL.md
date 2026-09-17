@@ -85,8 +85,6 @@ Simple is not vague, and short is not wrong. Keep:
 - **Subordinate clauses that add colour, not meaning.**
 - **Passive voice** used without a reason. Name the actor: "the hook writes the file", not "the file is written".
 
-Prefer the short common word: "use" over "utilize", "about" over "approximately", "because" over "due to the fact that".
-
 Write for a reader whose English is good but not native. They know the technical terms, not the idioms.
 
 - **Idioms and figures of speech.** "We delayed the release", not "we bit the bullet". No sports or war comparisons.
@@ -114,15 +112,6 @@ Replace each with a generic placeholder and say what was replaced. Never pick a 
 - If you write 200 lines and it could be 50, rewrite it.
 
 Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
-
-**Surgical changes.** Touch only what you must. Clean up only your own mess.
-
-- Don't "improve" adjacent code, comments, or formatting.
-- Don't refactor things that aren't broken.
-- If you notice unrelated dead code, mention it — don't delete it.
-- Remove imports, variables, and functions that YOUR changes made unused. Leave pre-existing dead code alone.
-
-The test: every changed line should trace directly to the user's request.
 
 **Keep existing callers working.** Before changing a signature, config key, file format, CLI flag, or exported name, find the callers and say what breaks. Breaking is allowed; breaking silently is not.
 
