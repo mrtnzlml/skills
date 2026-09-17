@@ -38,13 +38,36 @@ bash hooks-handlers/session-start.sh | jq -r .hookSpecificOutput.additionalConte
 
 Needs `jq`.
 
+## Evals
+
+`claude plugin eval .` runs the suite in `evals/`. Each case is a `prompt.md` plus graders that are
+either `regex` (deterministic, free) or `llm` (judged, costs a little).
+
+It defaults to `--ablation with-without`, which runs every case twice — once with the plugin loaded
+and once without — and reports the delta. That delta is the only evidence that a rule in the skill
+changes anything. A case with a delta of zero is telling you the model already behaves that way.
+
+```sh
+claude plugin eval . --runs 1 --no-publish   # quick, noisy, about $0.85
+claude plugin eval .                         # 3 runs per arm, about $2.50
+```
+
+Results land in `evals/results/`, which is gitignored.
+
+## Spinner verbs
+
+`settings.json` at the plugin root is loaded automatically and replaces the stock spinner verbs.
+Delete the file to get the 193 defaults back.
+
 ## Layout
 
 ```
 .claude-plugin/plugin.json   plugin manifest
+settings.json                settings the plugin contributes
 skills/<name>/SKILL.md       one directory per skill
 hooks/hooks.json             event handlers
 hooks-handlers/              hook scripts
+evals/<case>/prompt.md       eval cases and their graders
 ```
 
 Add a skill by dropping a new directory under `skills/`. No manifest change needed.
