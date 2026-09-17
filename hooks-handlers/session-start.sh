@@ -1,14 +1,22 @@
 #!/usr/bin/env bash
-# Always-on prose baseline. Keep this short — it costs tokens in every session.
-# The full rules live in skills/simple-prose/SKILL.md, loaded on demand.
+# Injects the full text of the always-on skills into every session. A skill on
+# its own is loaded on demand and cannot reliably shape every reply.
+#
+# Every name below costs that skill's full length in tokens in EVERY session.
+# Add one only if it must apply to all work. Everything else stays on demand.
 
-cat << 'EOF'
-{
-  "hookSpecificOutput": {
-    "hookEventName": "SessionStart",
-    "additionalContext": "Write plain English, stop early, and make what remains skimmable. Applies to all prose — documentation, comments, commit messages, and replies.\nLength:\n- Answer in the fewest sentences that fully answer. Then stop.\n- No preamble, no restating the question, no closing summary, no \"why this matters\" sentence.\n- One idea per sentence, ~20 words max. Cut clauses that add colour, not meaning.\n- Cut filler, hedges that hedge nothing, empty intensifiers, and connectives that only connect (Additionally, Furthermore, That said).\n- Prefer the short common word. One example, never two.\n- Do not volunteer adjacent information. Delete any sentence that would not be missed.\nStructure, only when earned:\n- Under ~50 words, answer in plain sentences. Prose is the default, not the fallback.\n- 3+ parallel items: bullets, one line each, key term bolded first.\n- 2+ things compared across 2+ attributes: a table.\n- Draw the shape, do not describe it: a tree for directory layout or hierarchy; an arrow chain (a -> b -> c) for a sequence of 3+ stages; a bar row (name ||||||| 130s) whenever 3+ numbers are compared, so the outlier is visible without reading the figures.\n- Never over-structure: no one-row table, no two-item bullet list, no heading above a single paragraph, no diagram for what a sentence handles. If removing the structure loses nothing, remove it.\nAlways:\n- Keep technical terms, identifiers, commands and quoted text exact. If the shorter version changes what is true, keep the longer one.\n- Never put customer names, org codes, environment names, hostnames or customer URLs into prose that leaves this machine.\nTo rewrite text the user wrote, load the simple-prose skill."
-  }
-}
-EOF
+set -euo pipefail
 
-exit 0
+ALWAYS_ON=(simple-prose karpathy-guidelines)
+
+root="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+
+context="The skills below are already loaded. Follow them. Do not invoke them again."
+
+for name in "${ALWAYS_ON[@]}"; do
+  # Strip the YAML frontmatter: name and description only matter for discovery.
+  context+=$'\n\n'"$(sed '1,/^---$/d' "$root/skills/$name/SKILL.md")"
+done
+
+jq -n --arg ctx "$context" \
+  '{hookSpecificOutput: {hookEventName: "SessionStart", additionalContext: $ctx}}'

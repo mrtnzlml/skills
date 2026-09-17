@@ -20,9 +20,23 @@ The flag is repeatable, and it works alongside plugins installed from a marketpl
 
 ## Always-on hook
 
-`hooks/hooks.json` runs `hooks-handlers/session-start.sh` on `SessionStart`. It injects a short prose baseline into every session, because a skill alone is loaded on demand and cannot reliably shape every reply.
+`hooks/hooks.json` runs `hooks-handlers/session-start.sh` on `SessionStart`. The script reads the
+skills named in its `ALWAYS_ON` list, strips their frontmatter, and injects the full text into every
+session. A skill on its own is loaded on demand, which is not reliable enough for rules that must
+shape every reply.
 
-Keep that payload short — it costs tokens in every session. The full rules belong in `skills/simple-prose/SKILL.md`.
+Both skills are always on today. That costs about 2k tokens per session.
+
+To make another skill always-on, add its directory name to `ALWAYS_ON`. Everything else stays on
+demand — do not add a skill there unless it applies to all work.
+
+Check what gets injected:
+
+```sh
+bash hooks-handlers/session-start.sh | jq -r .hookSpecificOutput.additionalContext
+```
+
+Needs `jq`.
 
 ## Layout
 

@@ -1,5 +1,5 @@
 {
-  "description": "Injects the simple-prose baseline into every session",
+  "description": "Injects the always-on skills into every session",
   "hooks": {
     "SessionStart": [
       {
