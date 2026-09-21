@@ -99,7 +99,9 @@ Never leak a customer name or customer data. Before anything leaves this session
 - environment names and queue / hook / engine slugs
 - hostnames, URLs, and customer file paths
 
-Replace each with a generic placeholder and say what was replaced. Never pick a substitute that still identifies the customer.
+Replace each with a generic placeholder. Never pick a substitute that still identifies the customer.
+
+Name the kind of thing you replaced, never the value: "the hostname", not the hostname. A change list that quotes what it redacted has redacted nothing. When the text will be pasted somewhere whole — an issue body, a commit message, a ticket — the note does not belong in it. Say it to the user instead, and still without the value.
 
 ## Code
 
