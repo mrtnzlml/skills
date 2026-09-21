@@ -30,7 +30,7 @@ not reliable enough for rules that must shape every reply.
 | `SessionStart` | The main thread. |
 | `SubagentStart` | `SessionStart` context does not reach a `Task`-spawned agent, so without this every subagent writes unruled prose. |
 
-`working-rules` is always on today. That costs about 1.7k tokens per session, and again per
+`working-rules` is always on today. That costs about 2.2k tokens per session, and again per
 subagent.
 
 To make another skill always-on, add its directory name to `ALWAYS_ON`. Everything else stays on

@@ -11,7 +11,11 @@ hook="$root/hooks-handlers/inject-skills.sh"
 
 # Roughly 4 bytes per token. The README quotes what this text costs in every
 # session; growing past the ceiling is a decision, not an accident.
-CEILING_BYTES=8000
+#
+# Raised from 8000 when the worked examples went in. If their eval delta does
+# not justify 1.1k bytes in every session and every subagent, they come back
+# out and this goes back down.
+CEILING_BYTES=9000
 
 # One load-bearing phrase per eval case. The phrase pins the rule, the case
 # measures it. Deleting either without the other trips this check, which is the
