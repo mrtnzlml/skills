@@ -70,9 +70,21 @@ It defaults to `--ablation with-without`, which runs every case twice — once w
 and once without — and reports the delta. That delta is the only evidence that a rule in the skill
 changes anything. A case with a delta of zero is telling you the model already behaves that way.
 
+**One rule per grader.** An LLM grader that ANDs four conditions into one verdict reports a single
+fail and hides which condition broke. `answer-first` sat at exactly 60% across three different
+versions of the skill because its judge bundled four rules and never once passed — 0 of 60 runs,
+both arms. Split into "answers first" and "stops at the answer", the same runs read 8/10 and 2/10:
+the skill was working on one half and failing the other, and the bundled score could not say so.
+Before trusting a judge, check that it passes something. A grader that never passes is a constant,
+not a measurement.
+
+`--runs 3` is too few. The no-plugin arm is the same baseline every time, so it should not move
+between runs; at 3 runs it moved by up to 24 points. Use `--runs 10` for anything you intend to
+act on, and treat a swing under about 15 points on a single case as noise even then.
+
 ```sh
-claude plugin eval . --runs 1 --no-publish   # quick, noisy, about $0.85
-claude plugin eval .                         # 3 runs per arm, about $2.50
+claude plugin eval . --runs 1 --no-publish    # quick, noisy, about $0.85
+claude plugin eval . --runs 10 --no-publish   # what a decision needs, about $16
 ```
 
 Results land in `evals/results/`, which is gitignored because each run is about 190k of JSON and
@@ -81,7 +93,7 @@ one row per case, small enough to read as a diff. That file is where a rule's de
 becomes visible in the history rather than only on the machine that ran it.
 
 ```sh
-claude plugin eval . && bash scripts/snapshot.sh
+claude plugin eval . --runs 10 --no-publish && bash scripts/snapshot.sh
 ```
 
 ## What a plugin cannot do
