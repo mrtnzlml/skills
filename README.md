@@ -20,12 +20,18 @@ and surgical. The coding half is adopted from
 
 ## Always-on hook
 
-`hooks/hooks.json` runs `hooks-handlers/session-start.sh` on `SessionStart`. The script reads the
-skills named in its `ALWAYS_ON` list, strips their frontmatter, and injects the full text into every
-session. A name with no matching file is skipped with a message on stderr. A skill on its own is
-loaded on demand, which is not reliable enough for rules that must shape every reply.
+`hooks/hooks.json` runs `hooks-handlers/inject-skills.sh` on two events. The script reads the skills
+named in its `ALWAYS_ON` list, strips their frontmatter, and injects the full text. A name with no
+matching file is skipped with a message on stderr. A skill on its own is loaded on demand, which is
+not reliable enough for rules that must shape every reply.
 
-`working-rules` is always on today. That costs about 1.5k tokens per session.
+| Event | Why |
+| --- | --- |
+| `SessionStart` | The main thread. |
+| `SubagentStart` | `SessionStart` context does not reach a `Task`-spawned agent, so without this every subagent writes unruled prose. |
+
+`working-rules` is always on today. That costs about 1.7k tokens per session, and again per
+subagent.
 
 To make another skill always-on, add its directory name to `ALWAYS_ON`. Everything else stays on
 demand — do not add a skill there unless it applies to all work.
@@ -33,10 +39,27 @@ demand — do not add a skill there unless it applies to all work.
 Check what gets injected:
 
 ```sh
-bash hooks-handlers/session-start.sh | jq -r .hookSpecificOutput.additionalContext
+bash hooks-handlers/inject-skills.sh | jq -r .hookSpecificOutput.additionalContext
 ```
 
 Needs `jq`.
+
+## Checks
+
+`scripts/check.sh` is free, deterministic, and calls no API. The evals measure whether a rule
+changes the model's behaviour; these checks measure whether it reaches the model at all.
+
+```sh
+bash scripts/check.sh
+```
+
+It asserts that both events emit valid JSON, that no frontmatter leaks through, that a missing
+skill name degrades to a warning instead of an empty injection, and that the injected text stays
+under a byte ceiling — the README quotes that cost, so growing past it is a decision.
+
+It also pins one load-bearing phrase per eval case. Deleting a rule without deleting its case, or
+adding a case that grades no pinned rule, fails the check. A rule nobody grades is a rule nobody
+can defend.
 
 ## Evals
 
@@ -52,7 +75,14 @@ claude plugin eval . --runs 1 --no-publish   # quick, noisy, about $0.85
 claude plugin eval .                         # 3 runs per arm, about $2.50
 ```
 
-Results land in `evals/results/`, which is gitignored.
+Results land in `evals/results/`, which is gitignored because each run is about 190k of JSON and
+HTML. `scripts/snapshot.sh` distils the newest run into `evals/snapshot.md`, which is committed —
+one row per case, small enough to read as a diff. That file is where a rule's delta going to zero
+becomes visible in the history rather than only on the machine that ran it.
+
+```sh
+claude plugin eval . && bash scripts/snapshot.sh
+```
 
 ## What a plugin cannot do
 
@@ -74,7 +104,10 @@ claude --plugin-dir . --debug --debug-file /tmp/cc.log -p "ok" && grep "plugin s
 skills/<name>/SKILL.md       one directory per skill
 hooks/hooks.json             event handlers
 hooks-handlers/              hook scripts
+scripts/check.sh             deterministic checks, no API
+scripts/snapshot.sh          distils the newest eval run
 evals/<case>/prompt.md       eval cases and their graders
+evals/snapshot.md            committed per-case deltas
 ```
 
 Add a skill by dropping a new directory under `skills/`. No manifest change needed.

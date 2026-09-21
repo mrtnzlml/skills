@@ -1,12 +1,22 @@
 {
-  "description": "Injects the always-on skills into every session",
+  "description": "Injects the always-on skills into every session and every subagent",
   "hooks": {
     "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks-handlers/session-start.sh\""
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks-handlers/inject-skills.sh\" SessionStart"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks-handlers/inject-skills.sh\" SubagentStart"
           }
         ]
       }
