@@ -10,5 +10,7 @@ answer, and do not judge sentence length — a separate grader measures that.
 Judge one thing only: sentences name their actor. "The hook reads the file",
 not "the file is read".
 
-Fail the response only if the passive voice hides the actor in two or more
-sentences.
+First, quote every sentence that uses the passive voice without naming who
+acts. Then count them.
+
+Pass if you quoted zero or one sentence. Fail only if you quoted two or more.

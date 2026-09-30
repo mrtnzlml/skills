@@ -31,7 +31,7 @@ fi
   echo
   echo "The newest \`claude plugin eval .\` run, distilled. Regenerate with"
   echo "\`scripts/snapshot.sh\`. A delta of zero means the model already behaves"
-  echo "that way and the rule is paying rent for nothing."
+  echo "that way and the rule changes nothing."
   echo
   # runsPerCase is the case file's declared default and ignores --runs, so count
   # the runs actually recorded. A snapshot that misreports n is worse than none:

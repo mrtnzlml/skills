@@ -13,5 +13,9 @@ Judge it only against these two rules, which come from the skill under test:
 
 Pass if both hold. Fail if either is broken.
 
+The question asks for a difference. A first sentence that says what one of the
+two commands does is part of the answer, as long as the next sentence gives
+the other one. Do not fail it for naming only one command first.
+
 A separate grader judges whether the response stops in the right place. Do not
 consider anything that follows the answer here.
