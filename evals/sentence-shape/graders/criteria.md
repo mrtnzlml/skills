@@ -6,7 +6,6 @@ weight: 1
 
 The reader has intermediate English. Do not compare the response to any model
 answer, and do not judge sentence length — a separate grader measures that.
-A separate grader judges clause stacking; ignore it here.
 
 Judge one thing only: sentences name their actor. "The hook reads the file",
 not "the file is read".

@@ -81,4 +81,4 @@ Write the minimum code that solves the problem. Add no features, abstractions, o
 
 ## Rewrites
 
-For text the user wrote, give the rewrite, then at most 3 lines on the changes that matter.
+When the user asks you to edit their text, give the rewrite, then at most 3 lines on the changes that matter. When they ask you to write something new from notes, give only the result.
