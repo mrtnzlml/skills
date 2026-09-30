@@ -11,25 +11,23 @@ hook="$root/hooks-handlers/inject-skills.sh"
 
 # Roughly 4 bytes per token. The README quotes what this text costs in every
 # session; growing past the ceiling is a decision, not an accident.
-#
-# Raised from 8000 when the worked examples went in. If their eval delta does
-# not justify 1.1k bytes in every session and every subagent, they come back
-# out and this goes back down.
-CEILING_BYTES=9000
+CEILING_BYTES=5000
 
 # One load-bearing phrase per eval case. The phrase pins the rule, the case
 # measures it. Deleting either without the other trips this check, which is the
 # reminder that a rule nobody grades is a rule nobody can defend.
 INVARIANTS=(
-  'answer-first|Answer first'
+  'answer-first|Start with the answer.'
+  'commit-message|at most 3 lines of why'
   'customer-data|Never leak a customer name'
-  'keep-accuracy|If the shorter version changes what is true, keep the longer one.'
-  'no-idioms|Idioms and figures of speech'
-  'no-over-structure|Never over-structure'
-  'no-sprawl|Under 80 words'
-  'plain-words|good but not native'
-  'sentence-shape|~20 words per sentence'
-  'surgical-change|Keep existing callers working'
+  'keep-accuracy|Keep every fact, condition, and caveat that changes what is true.'
+  'no-idioms|no idioms, no metaphors'
+  'no-over-structure|Under 50 words, always write plain sentences.'
+  'no-sprawl|at most 80 words'
+  'pr-description|then how to test it'
+  'review-findings|Each finding is one sentence'
+  'sentence-shape|with one idea each'
+  'task-report|what you verified, and what is still open'
 )
 
 fail=0

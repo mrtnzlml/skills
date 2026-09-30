@@ -1,125 +1,90 @@
-# skills
+# ✂️ skills
 
-Personal Claude Code plugin. The repository root is the plugin.
+Claude writes too much. This plugin makes it stop. 🤐
 
-## Load it
+## 🥊 Before and after
+
+Same question, same model. Both answers are copied word for word from one eval run.
+
+> Should we use PostgreSQL or SQLite for a single-user desktop app that stores about 50,000 records?
+
+**✅ With the plugin: 65 words.**
+
+> Use SQLite. It runs inside your app as a library, so users install nothing and manage no server. It stores the whole database in one file, which makes backup and migration simple. For 50,000 records it is fast, and one user means you avoid its main limit, which is many writers at the same time. PostgreSQL makes sense when many clients write over a network.
+
+**😵 Without the plugin: 300 words.**
+
+> **Use SQLite.** For a single-user desktop app with about 50,000 records, it's the clear choice.
+>
+> **Why SQLite fits:**
+> - **Nothing to install or run.** It's a library inside your app, and the whole database is one file. With PostgreSQL, every user would need a database server installed, configured, started and upgraded, which is a lot to ask of a desktop app.
+> - **50k records is small.** SQLite handles millions of rows easily. With sensible indexes, queries at your size will take milliseconds.
+> - **Backup and migration are simple.** Copying the file is a backup. Moving the file moves the data.
+> - **It's reliable.** It supports ACID transactions and is heavily tested. It's used inside browsers, phones and many desktop apps.
+> - **Support is everywhere.** Every major language and ORM supports it, and some platforms include it by default (for example, Python's `sqlite3` module).
+>
+> **When PostgreSQL would make sense instead:**
+> - Many users or processes writing to the same database at once. SQLite allows only one writer at a time, which doesn't matter for a single user.
+> - A shared database on a server that several clients connect to.
+> - A need for Postgres-specific features, such as advanced JSONB indexing, PostGIS, or detailed roles and permissions.
+> - A near-term plan to turn the app into a multi-user web service. Even then, it's usually easier to start with SQLite and migrate later, especially if you use an ORM or query builder.
+>
+> **Tips if you go with SQLite:**
+> - Turn on WAL mode (`PRAGMA journal_mode=WAL;`). Reads and writes block each other less, and it's more resilient.
+> - Turn on `PRAGMA foreign_keys=ON;`, since it's off by default.
+> - Store the database file in the OS's standard app-data folder, not next to the executable.
+> - Add indexes for the columns you filter or sort on.
+
+Both pick SQLite for the same reason. You had to scroll to get to the end of the second one. 📜
+
+## 🚀 Try it
 
 ```sh
 git clone https://github.com/mrtnzlml/skills.git
 claude --plugin-dir ./skills
 ```
 
-The flag is repeatable, and it works alongside plugins installed from a marketplace.
+## 🎁 What is inside
 
-## Skills
+One skill, `working-rules`:
 
-`working-rules` is the only skill. It cuts verbosity, prefers plain English, keeps
-customer-identifying details out of shared text, and holds the coding rules that keep changes small
-and surgical. The coding half is adopted from
-[multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills).
+- 📏 **Length limits** for every kind of output: replies, task reports, reviews, commits, PRs.
+- 🌍 **Plain English** for readers whose first language is not English. No idioms, no jargon.
+- 🔒 **Customer data** stays out of anything that leaves the session.
+- 🔧 **Small code changes.** Adopted from
+  [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills), which
+  is based on [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876).
+  That repository declares MIT in its skill frontmatter and has no LICENSE file.
 
-## Always-on hook
+## 🔌 Always on
 
-`hooks/hooks.json` runs `hooks-handlers/inject-skills.sh` on two events. The script reads the skills
-named in its `ALWAYS_ON` list, strips their frontmatter, and injects the full text. A name with no
-matching file is skipped with a message on stderr. A skill on its own is loaded on demand, which is
-not reliable enough for rules that must shape every reply.
+Claude loads a skill only when it decides the skill fits, and it does not always decide that. So a
+hook injects the rules into every session with `SessionStart` and into every subagent with
+`SubagentStart`. The price is about 1.2k tokens each time.
 
-| Event | Why |
-| --- | --- |
-| `SessionStart` | The main thread. |
-| `SubagentStart` | `SessionStart` context does not reach a `Task`-spawned agent, so without this every subagent writes unruled prose. |
-
-`working-rules` is always on today. That costs about 2.2k tokens per session, and again per
-subagent.
-
-To make another skill always-on, add its directory name to `ALWAYS_ON`. Everything else stays on
-demand — do not add a skill there unless it applies to all work.
-
-Check what gets injected:
+See exactly what Claude receives:
 
 ```sh
 bash hooks-handlers/inject-skills.sh | jq -r .hookSpecificOutput.additionalContext
 ```
 
-Needs `jq`.
+## 🧪 Proof
 
-## Checks
-
-`scripts/check.sh` is free, deterministic, and calls no API. The evals measure whether a rule
-changes the model's behaviour; these checks measure whether it reaches the model at all.
-
-```sh
-bash scripts/check.sh
-```
-
-It asserts that both events emit valid JSON, that no frontmatter leaks through, that a missing
-skill name degrades to a warning instead of an empty injection, and that the injected text stays
-under a byte ceiling — the README quotes that cost, so growing past it is a decision.
-
-It also pins one load-bearing phrase per eval case. Deleting a rule without deleting its case, or
-adding a case that grades no pinned rule, fails the check. A rule nobody grades is a rule nobody
-can defend.
-
-## Evals
-
-`claude plugin eval .` runs the suite in `evals/`. Each case is a `prompt.md` plus graders that are
-either `regex` (deterministic, free) or `llm` (judged, costs a little).
-
-It defaults to `--ablation with-without`, which runs every case twice — once with the plugin loaded
-and once without — and reports the delta. That delta is the only evidence that a rule in the skill
-changes anything. A case with a delta of zero is telling you the model already behaves that way.
-
-**One rule per grader.** An LLM grader that ANDs four conditions into one verdict reports a single
-fail and hides which condition broke. `answer-first` sat at exactly 60% across three different
-versions of the skill because its judge bundled four rules and never once passed — 0 of 60 runs,
-both arms. Split into "answers first" and "stops at the answer", the same runs read 8/10 and 2/10:
-the skill was working on one half and failing the other, and the bundled score could not say so.
-Before trusting a judge, check that it passes something. A grader that never passes is a constant,
-not a measurement.
-
-`--runs 3` is too few. The no-plugin arm is the same baseline every time, so it should not move
-between runs; at 3 runs it moved by up to 24 points. Use `--runs 10` for anything you intend to
-act on, and treat a swing under about 15 points on a single case as noise even then.
+Every rule has to show that it changes something. `claude plugin eval .` runs each case twice, with
+and without the plugin, and reports the difference. A rule that makes no difference gets deleted,
+and several already have been.
 
 ```sh
-claude plugin eval . --runs 1 --no-publish    # quick, noisy, about $0.85
-claude plugin eval . --runs 10 --no-publish   # what a decision needs, about $16
-```
-
-Results land in `evals/results/`, which is gitignored because each run is about 190k of JSON and
-HTML. `scripts/snapshot.sh` distils the newest run into `evals/snapshot.md`, which is committed —
-one row per case, small enough to read as a diff. That file is where a rule's delta going to zero
-becomes visible in the history rather than only on the machine that ran it.
-
-```sh
+bash scripts/check.sh                                              # free, no API
 claude plugin eval . --runs 10 --no-publish && bash scripts/snapshot.sh
 ```
 
-## What a plugin cannot do
+`evals/snapshot.md` holds the latest scores. What the evals taught us:
 
-A plugin can ship a `settings.json`, but Claude Code filters it to an allowlist — `agent` and
-`subagentStatusLine` — and silently drops everything else. There is no warning; the keys just do
-nothing. Settings like `spinnerVerbs` or `alwaysThinkingEnabled` have to live in
-`~/.claude/settings.json`.
+- 🎯 **One rule per grader.** A judge that checks four rules at once reports one fail and hides which rule broke.
+- ⚖️ **Check that a judge can pass.** A grader that never passes measures nothing.
+- 🔁 **Use `--runs 10`.** At 3 runs the baseline moved by 24 points with nothing changed.
+- 🎲 **Treat a swing under 15 points on one case as noise**, even at 10 runs.
 
-Check what survived with:
-
-```sh
-claude --plugin-dir . --debug --debug-file /tmp/cc.log -p "ok" && grep "plugin settings" /tmp/cc.log
-```
-
-## Layout
-
-```
-.claude-plugin/plugin.json   plugin manifest
-skills/<name>/SKILL.md       one directory per skill
-hooks/hooks.json             event handlers
-hooks-handlers/              hook scripts
-scripts/check.sh             deterministic checks, no API
-scripts/snapshot.sh          distils the newest eval run
-evals/<case>/prompt.md       eval cases and their graders
-evals/snapshot.md            committed per-case deltas
-```
-
-Add a skill by dropping a new directory under `skills/`. No manifest change needed.
+`scripts/check.sh` pins one phrase per rule to its eval case. Delete a rule but keep its case, and
+the check fails. Add a case that tests no pinned rule, and it fails too.

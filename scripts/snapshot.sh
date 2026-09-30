@@ -37,8 +37,7 @@ fi
   # the runs actually recorded. A snapshot that misreports n is worse than none:
   # n is what says whether a delta is solid or noise.
   jq -r '"_" + (.startedAt | split("T")[0]) + " · claude " + .claudeVersion
-    + " · " + (.cases[0].arms.with | length | tostring) + " runs per arm · $"
-    + (.costUsd * 100 | round / 100 | tostring) + "_"' "$result"
+    + " · " + (.cases[0].arms.with | length | tostring) + " runs per arm_"' "$result"
   echo
   echo "| case | with | without | delta |"
   echo "| --- | --: | --: | --: |"
