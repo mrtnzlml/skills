@@ -1,0 +1,10 @@
+{
+  "name": "usage-status",
+  "version": "0.2.0",
+  "description": "Shows the model, the context fill and the rate-limit windows with pace markers in one line above the prompt",
+  "author": {
+    "name": "mrtnzlml"
+  },
+  "repository": "https://github.com/mrtnzlml/skills",
+  "types": "./types/index.d.ts"
+}

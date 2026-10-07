@@ -78,6 +78,26 @@ See exactly what Claude receives:
 bash hooks-handlers/inject-skills.sh | jq -r .hookSpecificOutput.additionalContext
 ```
 
+## Usage band
+
+A second plugin, `usage-status`, shows your usage in one row above the prompt: the model, the
+effort, the folder, the context fill, and the 5-hour and 7-day rate limits.
+
+<img src="assets/usage-band.svg" alt="Claude Code with the usage band above the prompt, with a pace marker in each rate-limit bar" width="894">
+
+The white marker in a bar shows where steady use would be now. The bar is green at or under that
+pace, yellow up to 20 points ahead, and red when it is more than 20 points ahead or 90% used. If the
+row does not fit, the rate limits move to a second row.
+
+Install it from the Claude Code prompt:
+
+```
+/plugin install usage-status --marketplace mrtnzlml/skills
+```
+
+The plugin is a mod: TypeScript hooks in `mods/usage-status/hooks/register.tsx`. CI runs its tests
+with `claude plugin test mods/usage-status`.
+
 ## Testimonials
 
 > Thank you for this, the change of the conversation effectiveness is quite drastic. I have to ask for elaborations and explanations quite a bit more as opposed to sifting through bulk. It's like it turned into smug knowitall vs gullible mentor it was previously. It feels more dangerous somehow as its always sure about itself 😄

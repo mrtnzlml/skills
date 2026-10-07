@@ -1,0 +1,8 @@
+{
+  "name": "mrtnzlml",
+  "owner": { "name": "mrtnzlml" },
+  "plugins": [
+    { "name": "mrtnzlml-skills", "source": "./" },
+    { "name": "usage-status", "source": "./mods/usage-status" }
+  ]
+}
