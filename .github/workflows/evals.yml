@@ -28,11 +28,14 @@ jobs:
           node-version: 22
       - run: npm install -g @anthropic-ai/claude-code
       # --threshold 0 reports failing cases without failing the job.
+      # Without a pinned model, CI runs cost half as much and scored lower than
+      # local runs. Pin the model so CI scores compare with evals/snapshot.md.
       - name: Run evals
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         run: |
           claude plugin eval . --trust-plugin --no-publish \
+            --model claude-opus-5-5 \
             --runs "${{ inputs.runs || '10' }}" -j 4 --threshold 0 \
             --output-dir evals/results/ci
       - name: Summarize
